@@ -31,15 +31,15 @@ before_install:
 
 env:
     - SPLUNK_VERSION=6.2-sdk
-    - SPLUNK_VERSION=6.3-sdk
-    - SPLUNK_VERSION=6.4-sdk
-    - SPLUNK_VERSION=6.5-sdk
+    # - SPLUNK_VERSION=6.3-sdk
+    # - SPLUNK_VERSION=6.4-sdk
+    # - SPLUNK_VERSION=6.5-sdk
 
 language: python
 
 python:
   - "2.7"
-  - "2.6"
+  # - "2.6"
   - "3.4"
 
 install: "pip install unittest2 requests future"
