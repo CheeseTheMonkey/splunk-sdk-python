@@ -250,7 +250,7 @@ class BuildCommand(Command):
 
         build_dir = os.path.basename(self.build_dir)
         archive_name = self.package_name + '.tar'
-        current_dir = os.getcwdu()
+        current_dir = os.getcwd()
         os.chdir(self.build_base)
 
         try:
@@ -425,7 +425,7 @@ class TestCommand(Command):
 
 # endregion
 
-current_directory = os.getcwdu()
+current_directory = os.getcwd()
 os.chdir(project_dir)
 
 try:

@@ -149,7 +149,7 @@ class File(Validator):
         return None if value is None else value.name
 
     _var_run_splunk = os.path.join(
-        os.environ['SPLUNK_HOME'] if 'SPLUNK_HOME' in os.environ else os.getcwdu(), 'var', 'run', 'splunk')
+        os.environ['SPLUNK_HOME'] if 'SPLUNK_HOME' in os.environ else os.getcwd(), 'var', 'run', 'splunk')
 
 
 class Integer(Validator):
