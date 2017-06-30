@@ -15,7 +15,8 @@
 # under the License.
 
 from __future__ import print_function
-import testlib
+from __future__ import absolute_import
+from . import testlib
 import logging
 import os
 import splunklib.client as client

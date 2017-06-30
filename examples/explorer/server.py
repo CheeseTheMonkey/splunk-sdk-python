@@ -68,7 +68,7 @@ class RedirectHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         # Get the redirect URL and remove it from the headers
         redirect_url = None
-        if headers.has_key("x-redirect-url"):
+        if "x-redirect-url" in headers:
             redirect_url = headers["x-redirect-url"]
             del headers["x-redirect-url"]
         else:

@@ -14,12 +14,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from __future__ import absolute_import
 import os
 from subprocess import PIPE, Popen
 import time
 import sys
 
-import testlib
+from . import testlib
 
 import splunklib.client as client
 
@@ -93,7 +94,7 @@ class ExamplesTestCase(testlib.SDKTestCase):
             conf = self.service.confs['server']
             if 'SDK-STANZA' in conf:
                 conf.delete("SDK-STANZA")
-        except Exception, e:
+        except Exception as e:
             pass
 
         try:

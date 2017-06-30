@@ -262,7 +262,7 @@ class List(Validator):
             return value
 
         try:
-            value = csv.reader([value], self.Dialect).next()
+            value = next(csv.reader([value], self.Dialect))
         except csv.Error as error:
             raise ValueError(error)
 

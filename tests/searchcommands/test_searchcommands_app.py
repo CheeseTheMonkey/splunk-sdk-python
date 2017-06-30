@@ -70,7 +70,7 @@ class Recording(object):
         if os.path.exists(self._dispatch_dir):
             with io.open(os.path.join(self._dispatch_dir, 'request.csv')) as ifile:
                 reader = csv.reader(ifile)
-                for name, value in izip(reader.next(), reader.next()):
+                for name, value in izip(next(reader), next(reader)):
                     if name == 'search':
                         self._search = value
                         break
@@ -248,16 +248,16 @@ class TestSearchCommandsApp(TestCase):
 
     def assertInfoEqual(self, output, expected):
         reader = csv.reader(StringIO(output))
-        self.assertEqual([], reader.next())
-        fields = reader.next()
-        values = reader.next()
+        self.assertEqual([], next(reader))
+        fields = next(reader)
+        values = next(reader)
         self.assertRaises(StopIteration, reader.next)
         output = dict(izip(fields, values))
 
         reader = csv.reader(StringIO(expected))
-        self.assertEqual([], reader.next())
-        fields = reader.next()
-        values = reader.next()
+        self.assertEqual([], next(reader))
+        fields = next(reader)
+        values = next(reader)
         self.assertRaises(StopIteration, reader.next)
         expected = dict(izip(fields, values))
 
@@ -301,7 +301,7 @@ class TestSearchCommandsApp(TestCase):
         output = csv.DictReader(output)
 
         for expected_row in expected:
-            output_row = output.next()
+            output_row = next(output)
 
             try:
                 timestamp = float(output_row['_time'])
@@ -337,7 +337,7 @@ class TestSearchCommandsApp(TestCase):
         output = csv.DictReader(output)
 
         for expected_row in expected:
-            output_row = output.next()
+            output_row = next(output)
             self.assertDictEqual(
                 expected_row, output_row, 'Error on line {0}: expected {1}, not {2}'.format(
                     line_number, expected_row, output_row))

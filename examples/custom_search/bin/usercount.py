@@ -165,7 +165,7 @@ def main(argv):
             user = user if not user.startswith('_') else user[1:]
     
             usercount = 0
-            if usercounts.has_key(user):
+            if user in usercounts:
                 usercount = usercounts[user]
     
             usercount += 1

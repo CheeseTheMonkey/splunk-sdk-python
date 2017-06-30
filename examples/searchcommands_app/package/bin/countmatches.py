@@ -62,7 +62,7 @@ class CountMatchesCommand(StreamingCommand):
         self.logger.debug('CountMatchesCommand: %s', self)  # logs command line
         pattern = self.pattern
         for record in records:
-            count = 0L
+            count = 0
             for fieldname in self.fieldnames:
                 matches = pattern.findall(unicode(record[fieldname].decode("utf-8")))
                 count += len(matches)

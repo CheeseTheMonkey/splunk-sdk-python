@@ -68,7 +68,7 @@ def top_sources(service):
                 if status_source_xml.startswith("<a"):
                     try:
                         source = ElementTree.XML(status_source_xml).text
-                    except Exception, e:
+                    except Exception as e:
                         print(status_source_xml)
                         raise e
                 

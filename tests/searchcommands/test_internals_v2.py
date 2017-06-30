@@ -224,8 +224,8 @@ class TestInternals(TestCase):
         self.assertListEqual(writer._inspector['messages'], messages)
 
         self.assertDictEqual(
-            dict(ifilter(lambda (k, v): k.startswith('metric.'), writer._inspector.iteritems())),
-            dict(imap(lambda (k, v): ('metric.' + k, v), metrics.iteritems())))
+            dict(ifilter(lambda k_v: k_v[0].startswith('metric.'), writer._inspector.iteritems())),
+            dict(imap(lambda k_v1: ('metric.' + k_v1[0], k_v1[1]), metrics.iteritems())))
 
         writer.flush(finished=True)
 

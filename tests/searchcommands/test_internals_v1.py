@@ -28,6 +28,7 @@ from itertools import izip
 from unittest import main, TestCase
 
 import os
+from functools import reduce
 
 
 class TestInternals(TestCase):

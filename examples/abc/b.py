@@ -35,7 +35,7 @@ context = binding.connect(
 
 response = context.get('apps/local')
 if response.status != 200:
-    raise Exception, "%d (%s)" % (response.status, response.reason)
+    raise Exception("%d (%s)" % (response.status, response.reason))
 
 body = response.body.read()
 data = ElementTree.XML(body)

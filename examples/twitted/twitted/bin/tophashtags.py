@@ -166,7 +166,7 @@ def main(argv):
             hashtag = hashtag_match.group(0).strip().lower()
     
             hashtag_count = 0
-            if hashtags.has_key(hashtag):
+            if hashtag in hashtags:
                 hashtag_count = hashtags[hashtag]
             
             hashtags[hashtag] = hashtag_count + 1

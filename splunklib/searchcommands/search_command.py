@@ -271,8 +271,8 @@ class SearchCommand(object):
         try:
             with open(path, 'rb') as f:
                 reader = csv.reader(f, dialect=CsvDialect)
-                fields = reader.next()
-                values = reader.next()
+                fields = next(reader)
+                values = next(reader)
         except IOError as error:
             if error.errno == 2:
                 self.logger.error('Search results info file {} does not exist.'.format(json_encode_string(path)))
@@ -290,7 +290,7 @@ class SearchCommand(object):
             except ValueError:
                 return value
 
-        info = ObjectView(dict(imap(lambda (f, v): (convert_field(f), convert_value(v)), izip(fields, values))))
+        info = ObjectView(dict(imap(lambda f_v: (convert_field(f_v[0]), convert_value(f_v[1])), izip(fields, values))))
 
         try:
             count_map = info.countMap
@@ -307,7 +307,7 @@ class SearchCommand(object):
         except AttributeError:
             pass
         else:
-            messages = ifilter(lambda (t, m): t or m, izip(msg_type.split('\n'), msg_text.split('\n')))
+            messages = ifilter(lambda t_m: t_m[0] or t_m[1], izip(msg_type.split('\n'), msg_text.split('\n')))
             info.msg = [Message(message) for message in messages]
             del info.msgType
 
@@ -887,7 +887,7 @@ class SearchCommand(object):
         reader = csv.reader(ifile, dialect=CsvDialect)
 
         try:
-            fieldnames = reader.next()
+            fieldnames = next(reader)
         except StopIteration:
             return
 
@@ -929,7 +929,7 @@ class SearchCommand(object):
                 reader = csv.reader(StringIO(body), dialect=CsvDialect)
 
                 try:
-                    fieldnames = reader.next()
+                    fieldnames = next(reader)
                 except StopIteration:
                     return
 
@@ -1003,7 +1003,7 @@ class SearchCommand(object):
             :return: String representation of this instance
 
             """
-            text = ', '.join(imap(lambda (name, value): name + '=' + json_encode_string(unicode(value)), self.iteritems()))
+            text = ', '.join(imap(lambda name_value: name_value[0] + '=' + json_encode_string(unicode(name_value[1])), self.iteritems()))
             return text
 
         # region Methods
@@ -1026,7 +1026,7 @@ class SearchCommand(object):
             definitions = type(self).configuration_setting_definitions
             version = self.command.protocol_version
             return ifilter(
-                lambda (name, value): value is not None, imap(
+                lambda name_value1: name_value1[1] is not None, imap(
                     lambda setting: (setting.name, setting.__get__(self)), ifilter(
                         lambda setting: setting.is_supported_by_protocol(version), definitions)))
 

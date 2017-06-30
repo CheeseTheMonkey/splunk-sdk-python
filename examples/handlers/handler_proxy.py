@@ -56,13 +56,13 @@ def request(url, message, **kwargs):
     req = urllib2.Request(url, data, headers)
     try:
         response = urllib2.urlopen(req)
-    except urllib2.URLError, response:
+    except urllib2.URLError as response:
         # If running Python 2.7.9+, disable SSL certificate validation and try again
         if sys.version_info >= (2, 7, 9):
             response = urllib2.urlopen(req, context=ssl._create_unverified_context())
         else:
             raise
-    except urllib2.HTTPError, response:
+    except urllib2.HTTPError as response:
         pass # Propagate HTTP errors via the returned response message
     return {
         'status': response.code,

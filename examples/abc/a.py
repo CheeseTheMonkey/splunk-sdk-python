@@ -41,7 +41,7 @@ try:
 finally:
     connection.close()
 if response.status != 200:
-    raise Exception, "%d (%s)" % (response.status, response.reason)
+    raise Exception("%d (%s)" % (response.status, response.reason))
 body = response.read()
 sessionKey = ElementTree.XML(body).findtext("./sessionKey")
 
@@ -60,7 +60,7 @@ try:
 finally:
     connection.close()
 if response.status != 200:
-    raise Exception, "%d (%s)" % (response.status, response.reason)
+    raise Exception("%d (%s)" % (response.status, response.reason))
 
 body = response.read()
 data = ElementTree.XML(body)

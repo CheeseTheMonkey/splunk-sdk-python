@@ -43,7 +43,7 @@ from contextlib import contextmanager
 from xml.etree.ElementTree import XML
 try:
     from xml.etree.ElementTree import ParseError
-except ImportError, e:
+except ImportError as e:
     from xml.parsers.expat import ExpatError as ParseError
 
 from .data import record
@@ -476,7 +476,7 @@ class Context(object):
         self.autologin = kwargs.get("autologin", False)
 
         # Store any cookies in the self.http._cookies dict
-        if kwargs.has_key("cookie") and kwargs['cookie'] not in [None, _NoAuthenticationToken]:
+        if "cookie" in kwargs and kwargs['cookie'] not in [None, _NoAuthenticationToken]:
             _parse_cookies(kwargs["cookie"], self.http._cookies)
 
     def get_cookies(self):

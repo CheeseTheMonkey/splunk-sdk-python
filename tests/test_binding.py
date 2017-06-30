@@ -15,13 +15,14 @@
 # under the License.
 
 
+from __future__ import absolute_import
 import time
 import urllib2
 from StringIO import StringIO
 from xml.etree.ElementTree import XML
 
 import logging
-import testlib
+from . import testlib
 import unittest
 import socket
 import sys
@@ -200,14 +201,14 @@ class TestUserManipulation(BindingTestCase):
         try:
             response = self.context.delete(PATH_USERS + self.username)
             self.assertEqual(response.status, 200)
-        except HTTPError, e:
+        except HTTPError as e:
             self.assertTrue(e.status in [400, 500])
 
     def tearDown(self):
         BindingTestCase.tearDown(self)
         try:
             self.context.delete(PATH_USERS + self.username)
-        except HTTPError, e:
+        except HTTPError as e:
             if e.status not in [400, 500]:
                 raise
 
@@ -445,7 +446,7 @@ def urllib2_handler(url, message, **kwargs):
             response = urllib2.urlopen(req, context=ssl._create_unverified_context())
         else:
             response = urllib2.urlopen(req)
-    except urllib2.HTTPError, response:
+    except urllib2.HTTPError as response:
         pass # Propagate HTTP errors via the returned response message
     return {
         'status': response.code,
@@ -514,7 +515,7 @@ class TestCookieAuthentication(unittest.TestCase):
 
         def assertIsNotNone(self, obj, msg=None):
             if obj is None:
-                raise self.failureException, (msg or '%r is not None' % obj)
+                raise self.failureException(msg or '%r is not None' % obj)
 
     def test_cookie_in_auth_headers(self):
         self.assertIsNotNone(self.context._auth_headers)
@@ -701,7 +702,7 @@ class TestBasicAuthentication(unittest.TestCase):
     if getattr(unittest.TestCase, 'assertIsNotNone', None) is None:
         def assertIsNotNone(self, obj, msg=None):
            if obj is None:
-               raise self.failureException, (msg or '%r is not None' % obj)
+               raise self.failureException(msg or '%r is not None' % obj)
 
     def test_basic_in_auth_headers(self):
         self.assertIsNotNone(self.context._auth_headers)

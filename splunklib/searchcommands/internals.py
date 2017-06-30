@@ -294,7 +294,7 @@ class ConfigurationSettingsType(type):
             supporting_protocols=[1]),
         'maxinputs': specification(
             type=int,
-            constraint=lambda value: 0 <= value <= sys.maxint,
+            constraint=lambda value: 0 <= value <= sys.maxsize,
             supporting_protocols=[2]),
         'overrides_timeorder': specification(
             type=bool,
@@ -480,7 +480,7 @@ class RecordWriter(object):
         self._inspector = OrderedDict()
         self._chunk_count = 0
         self._record_count = 0
-        self._total_record_count = 0L
+        self._total_record_count = 0
 
     @property
     def is_flushed(self):
@@ -739,7 +739,7 @@ class RecordWriterV2(RecordWriter):
             if partial is True:
                 finished = False
 
-            metadata = [item for item in ('inspector', inspector), ('finished', finished)]
+            metadata = [item for item in (('inspector', inspector), ('finished', finished))]
             self._write_chunk(metadata, self._buffer.getvalue())
             self._clear()
 

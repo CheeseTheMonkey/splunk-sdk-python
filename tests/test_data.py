@@ -14,11 +14,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from __future__ import absolute_import
 import sys
 from os import path
 import xml.etree.ElementTree as et
 
-import testlib
+from . import testlib
 
 import splunklib.data as data
 
@@ -92,9 +93,9 @@ class DataTestCase(testlib.SDKTestCase):
 
         fh = open(path.join(testpath, "data/services.xml"), 'r')
         result = data.load(fh.read())
-        self.assertTrue(result.has_key('feed'))
-        self.assertTrue(result.feed.has_key('author'))
-        self.assertTrue(result.feed.has_key('entry'))
+        self.assertTrue('feed' in result)
+        self.assertTrue('author' in result.feed)
+        self.assertTrue('entry' in result.feed)
         titles = [item.title for item in result.feed.entry]
         self.assertEqual(
             titles,
@@ -105,9 +106,9 @@ class DataTestCase(testlib.SDKTestCase):
 
         fh = open(path.join(testpath, "data/services.server.info.xml"), 'r')
         result = data.load(fh.read())
-        self.assertTrue(result.has_key('feed'))
-        self.assertTrue(result.feed.has_key('author'))
-        self.assertTrue(result.feed.has_key('entry'))
+        self.assertTrue('feed' in result)
+        self.assertTrue('author' in result.feed)
+        self.assertTrue('entry' in result.feed)
         self.assertEqual(result.feed.title, 'server-info')
         self.assertEqual(result.feed.author.name, 'Splunk')
         self.assertEqual(result.feed.entry.content.cpu_arch, 'i386')

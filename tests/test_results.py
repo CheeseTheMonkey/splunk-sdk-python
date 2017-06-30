@@ -14,8 +14,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from __future__ import absolute_import
 from StringIO import StringIO
-import testlib
+from . import testlib
 from time import sleep
 import splunklib.results as results
 import io

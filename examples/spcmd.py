@@ -60,7 +60,7 @@ class Session(InteractiveInterpreter):
         return self.runsource(expression)
 
     def load(self, filename):
-        exec open(filename).read() in self.locals, self.locals
+        exec(open(filename).read(), self.locals, self.locals)
 
     # Run the interactive interpreter
     def run(self):
@@ -92,7 +92,7 @@ class Session(InteractiveInterpreter):
             except SyntaxError:
                 self.showsyntaxerror()
                 continue
-            except Exception, e:
+            except Exception as e:
                 print("Error: %s" % e)
                 continue
 
@@ -113,7 +113,7 @@ RULES = {
 
 def actions(opts):
     """Ansers if the given command line options specify any 'actions'."""
-    return len(opts.args) > 0 or opts.kwargs.has_key('eval') 
+    return len(opts.args) > 0 or 'eval' in opts.kwargs 
 
 def main():
     opts = utils.parse(sys.argv[1:], RULES, ".splunkrc")
@@ -131,7 +131,7 @@ def main():
 
     # Enter interactive mode automatically if no actions were specified or
     # or if interactive mode was specifically requested.
-    if not actions(opts) or opts.kwargs.has_key("interactive"):
+    if not actions(opts) or "interactive" in opts.kwargs:
         session.run()
 
 if __name__ == "__main__":

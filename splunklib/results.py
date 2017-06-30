@@ -202,7 +202,7 @@ class ResultsReader(object):
         return self
 
     def next(self):
-        return self._gen.next()
+        return next(self._gen)
 
     def _parse_results(self, stream):
         """Parse results and messages out of *stream*."""

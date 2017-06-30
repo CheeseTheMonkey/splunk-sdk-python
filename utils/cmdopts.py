@@ -54,14 +54,14 @@ class Parser(OptionParser):
             # Assign defaults ourselves here, instead of in the option parser
             # itself in order to allow for multiple calls to parse (dont want
             # subsequent calls to override previous values with default vals).
-            if rule.has_key('default'):
+            if 'default' in rule:
                 self.result['kwargs'][dest] = rule['default']
 
             flags = rule['flags']
             kwargs = { 'action': rule.get('action', "store") }
             # NOTE: Don't provision the parser with defaults here, per above.
             for key in ['callback', 'help', 'metavar', 'type']:
-                if rule.has_key(key): kwargs[key] = rule[key]
+                if key in rule: kwargs[key] = rule[key]
             self.add_option(*flags, dest=dest, **kwargs)
 
             # Remember the dest vars that we see, so that we can merge results

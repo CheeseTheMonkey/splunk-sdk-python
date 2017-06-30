@@ -196,7 +196,7 @@ class ConfigurationSetting(property):
 
         if len(values) > 0:
             settings = sorted(list(values.iteritems()))
-            settings = imap(lambda (n, v): '{}={}'.format(n, repr(v)), settings)
+            settings = imap(lambda n_v: '{}={}'.format(n_v[0], repr(n_v[1])), settings)
             raise AttributeError('Inapplicable configuration settings: ' + ', '.join(settings))
 
         cls.configuration_setting_definitions = definitions
@@ -417,7 +417,7 @@ class Option(property):
         def __init__(self, command):
             definitions = type(command).option_definitions
             item_class = Option.Item
-            OrderedDict.__init__(self, imap(lambda (name, option): (option.name, item_class(command, option)), definitions))
+            OrderedDict.__init__(self, imap(lambda name_option: (name_option[1].name_option[0], item_class(command, name_option[1])), definitions))
 
         def __repr__(self):
             text = 'Option.View([' + ','.join(imap(lambda item: repr(item), self.itervalues())) + '])'

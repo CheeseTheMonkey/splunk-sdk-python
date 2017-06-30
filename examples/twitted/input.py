@@ -61,8 +61,8 @@ class Twitter:
         connection.request("GET", TWITTER_STREAM_PATH, "", headers)
         response = connection.getresponse()
         if response.status != 200:
-            raise Exception, "HTTP Error %d (%s)" % (
-                response.status, response.reason)
+            raise Exception("HTTP Error %d (%s)" % (
+                response.status, response.reason))
         return response
 
 RULES = {
@@ -94,15 +94,15 @@ def cmdline():
     kwargs = parse(sys.argv[1:], RULES, ".splunkrc").kwargs
 
     # Prompt for Twitter username/password if not provided on command line
-    if not kwargs.has_key('tusername'):
+    if 'tusername' not in kwargs:
         kwargs['tusername'] = raw_input("Twitter username: ")
-    if not kwargs.has_key('tpassword'):
+    if 'tpassword' not in kwargs:
         kwargs['tpassword'] = getpass("Twitter password:")
 
     # Prompt for Splunk username/password if not provided on command line
-    if not kwargs.has_key('username'):
+    if 'username' not in kwargs:
         kwargs['username'] = raw_input("Splunk username: ")
-    if not kwargs.has_key('password'):
+    if 'password' not in kwargs:
         kwargs['password'] = getpass("Splunk password:")
 
     return kwargs
@@ -220,7 +220,7 @@ def print_record(record):
         return
 
     # Otherwise print a nice summary of the record
-    if record.has_key('delete_status_id'):
+    if 'delete_status_id' in record:
         print("delete %d %d" % (
             record['delete_status_id'],
             record['delete_status_user_id']))

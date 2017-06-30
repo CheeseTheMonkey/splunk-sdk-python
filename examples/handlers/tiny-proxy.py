@@ -66,7 +66,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         self.server.logger.log (logging.INFO, "connect to %s:%d", host_port[0], host_port[1])
         try: 
             return socket.create_connection(host_port)
-        except socket.error, arg:
+        except socket.error as arg:
             try: msg = arg[1]
             except: msg = arg
             self.send_error(404, msg)
@@ -125,7 +125,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                     if self.command == "GET":
                         ftp.retrbinary ("RETR %s"%path, self.connection.send)
                     ftp.quit ()
-                except Exception, e:
+                except Exception as e:
                     self.server.logger.log (logging.WARNING, "FTP Exception: %s",
                                             e)
         finally:
@@ -295,7 +295,7 @@ def main ():
     local_hostname = "127.0.0.1"
  
     try: opts, args = getopt.getopt (sys.argv[1:], "l:dhp:", [])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage (str (e))
         return 1
  
@@ -342,7 +342,7 @@ def main ():
                 logger.log (logging.INFO, "Number of active threads: %s",
                             threading.activeCount ())
                 req_count = 0
-        except select.error, e:
+        except select.error as e:
             if e[0] == 4 and run_event.isSet (): pass
             else:
                 logger.log (logging.CRITICAL, "Errno: %d - %s", e[0], e[1])

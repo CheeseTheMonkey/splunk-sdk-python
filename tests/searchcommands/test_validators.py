@@ -167,12 +167,12 @@ class TestValidators(TestCase):
                 self.assertIsInstance(value, long)
             self.assertEqual(validator.format(integer), unicode(integer))
 
-        test(2L * minsize)
+        test(2 * minsize)
         test(minsize)
         test(-1)
         test(0)
         test(1)
-        test(2L * maxsize)
+        test(2 * maxsize)
 
         for i in xrange(0, 10000):
             test(randint(minsize, maxsize))
@@ -181,7 +181,7 @@ class TestValidators(TestCase):
 
         validator = validators.Integer(minimum=0)
         self.assertEqual(validator.__call__(0), 0)
-        self.assertEqual(validator.__call__(2L * maxsize), 2L * maxsize)
+        self.assertEqual(validator.__call__(2 * maxsize), 2 * maxsize)
         self.assertRaises(ValueError, validator.__call__, -1)
 
         validator = validators.Integer(minimum=1, maximum=maxsize)
@@ -194,8 +194,8 @@ class TestValidators(TestCase):
         self.assertEqual(validator.__call__(minsize), minsize)
         self.assertEqual(validator.__call__(0), 0)
         self.assertEqual(validator.__call__(maxsize), maxsize)
-        self.assertRaises(ValueError, validator.__call__, minsize - 1L)
-        self.assertRaises(ValueError, validator.__call__, maxsize + 1L)
+        self.assertRaises(ValueError, validator.__call__, minsize - 1)
+        self.assertRaises(ValueError, validator.__call__, maxsize + 1)
 
         return
 
