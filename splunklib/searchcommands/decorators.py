@@ -22,7 +22,6 @@ except ImportError:
     from ..ordereddict import OrderedDict
 
 from inspect import getmembers, isclass, isfunction
-from itertools import imap
 
 from .internals import ConfigurationSettingsType, json_encode_string
 from .validators import OptionName
@@ -196,7 +195,7 @@ class ConfigurationSetting(property):
 
         if len(values) > 0:
             settings = sorted(list(values.iteritems()))
-            settings = imap(lambda n_v: '{}={}'.format(n_v[0], repr(n_v[1])), settings)
+            settings = ('{}={}'.format(n, repr(v)) for n, v in settings)
             raise AttributeError('Inapplicable configuration settings: ' + ', '.join(settings))
 
         cls.configuration_setting_definitions = definitions
@@ -417,10 +416,10 @@ class Option(property):
         def __init__(self, command):
             definitions = type(command).option_definitions
             item_class = Option.Item
-            OrderedDict.__init__(self, imap(lambda name_option: (name_option[1].name_option[0], item_class(command, name_option[1])), definitions))
+            OrderedDict.__init__(self, ((option.name, item_class(command, option)) for _, option in definitions))
 
         def __repr__(self):
-            text = 'Option.View([' + ','.join(imap(lambda item: repr(item), self.itervalues())) + '])'
+            text = 'Option.View([' + ','.join((repr(item) for item in self.itervalues())) + '])'
             return text
 
         def __str__(self):
