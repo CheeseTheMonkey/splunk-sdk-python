@@ -17,6 +17,9 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from builtins import bytes
+from builtins import str
+from builtins import range
 from splunklib.searchcommands import validators
 from random import randint
 from unittest import main, TestCase
@@ -48,7 +51,7 @@ class TestValidators(TestCase):
 
         for value in truth_values:
             for variant in value, value.capitalize(), value.upper():
-                for s in unicode(variant), bytes(variant):
+                for s in str(variant), bytes(variant):
                     self.assertEqual(validator.__call__(s), truth_values[value])
 
         self.assertIsNone(validator.__call__(None))
@@ -64,7 +67,7 @@ class TestValidators(TestCase):
         validator = validators.Duration()
 
         for seconds in range(0, 25 * 60 * 60, 59):
-            for value in unicode(seconds), bytes(seconds):
+            for value in str(seconds), bytes(seconds):
                 self.assertEqual(validator(value), seconds)
                 self.assertEqual(validator(validator.format(seconds)), seconds)
                 value = '%d:%02d' % (seconds / 60, seconds % 60)
@@ -161,11 +164,11 @@ class TestValidators(TestCase):
         validator = validators.Integer()
 
         def test(integer):
-            for s in str(integer), unicode(integer):
+            for s in str(integer), str(integer):
                 value = validator.__call__(s)
                 self.assertEqual(value, integer)
-                self.assertIsInstance(value, long)
-            self.assertEqual(validator.format(integer), unicode(integer))
+                self.assertIsInstance(value, int)
+            self.assertEqual(validator.format(integer), str(integer))
 
         test(2 * minsize)
         test(minsize)
@@ -174,7 +177,7 @@ class TestValidators(TestCase):
         test(1)
         test(2 * maxsize)
 
-        for i in xrange(0, 10000):
+        for i in range(0, 10000):
             test(randint(minsize, maxsize))
 
         # The Integer validator can impose a range restriction

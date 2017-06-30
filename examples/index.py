@@ -17,6 +17,8 @@
 """A command line utility for interacting with Splunk indexes."""
 from __future__ import print_function
 
+from builtins import next
+from builtins import object
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -57,7 +59,7 @@ Examples:
     index.py list MyIndex
 """
 
-class Program:
+class Program(object):
     def __init__(self, service):
         self.service = service
 

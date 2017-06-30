@@ -18,10 +18,12 @@
    (list-all/create/list/delete)."""
 from __future__ import print_function
 
+from future import standard_library
+standard_library.install_aliases()
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 import splunklib.binding as binding
 
@@ -170,7 +172,7 @@ def main(argv):
 
     # Extract from command line and build into variable args
     kwargs = {}
-    for key in RULES.keys():
+    for key in list(RULES.keys()):
         if key in opts.kwargs:
             if key == "operation":
                 operation = opts.kwargs[key]

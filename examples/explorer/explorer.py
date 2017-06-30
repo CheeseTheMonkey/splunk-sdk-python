@@ -14,6 +14,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from future import standard_library
+standard_library.install_aliases()
 import server
 import webbrowser
 import sys
@@ -26,7 +28,7 @@ try:
 except ImportError:
     raise Exception("Add the SDK repository to your PYTHONPATH to run the examples "
                     "(e.g., export PYTHONPATH=~/splunk-sdk-python.")
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 PORT = 8080
 
@@ -50,13 +52,13 @@ def main(argv):
             ("redirectport", opts.kwargs["redirectport"]),
             ("username", opts.kwargs["username"]),
             ("password", opts.kwargs["password"])]
-    if 'app' in opts.kwargs.keys():
+    if 'app' in list(opts.kwargs.keys()):
         args.append(('app', opts.kwargs['app']))
-    if 'owner' in opts.kwargs.keys():
+    if 'owner' in list(opts.kwargs.keys()):
         args.append(('owner', opts.kwargs['owner']))
 
     # Encode these arguments
-    args = urllib.urlencode(args)
+    args = urllib.parse.urlencode(args)
 
     # Launch the browser
     webbrowser.open("file://%s" % os.path.join(os.getcwd(), "explorer.html?%s" % args))

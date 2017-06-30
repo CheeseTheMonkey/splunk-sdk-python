@@ -17,6 +17,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from builtins import str
+from builtins import object
 try:
     from unittest2 import main, TestCase
 except ImportError:
@@ -350,8 +352,8 @@ class TestDecorators(TestCase):
         options.reset()
         missing = options.get_missing()
         self.assertListEqual(missing, [option.name for option in itervalues() if option.is_required])
-        self.assertListEqual(presets, [unicode(option) for option in itervalues() if option.value is not None])
-        self.assertListEqual(presets, [unicode(option) for option in itervalues() if unicode(option) != option.name + '=None'])
+        self.assertListEqual(presets, [str(option) for option in itervalues() if option.value is not None])
+        self.assertListEqual(presets, [str(option) for option in itervalues() if str(option) != option.name + '=None'])
 
         test_option_values = {
             validators.Boolean: ('0', 'non-boolean value'),
@@ -398,7 +400,7 @@ class TestDecorators(TestCase):
             "('code', u'foo == \"bar\"'),"
             "('duration', u'24:59:59'),"
             "('fieldname', u'some.field_name'),"
-            "('file', u" + unicode(repr(__file__)) + "),"
+            "('file', u" + str(repr(__file__)) + "),"
             "('integer', u'100'),"
             "('logging_configuration', " + repr(environment.logging_configuration) + "),"
             "('logging_level', u'WARNING'),"
@@ -411,7 +413,7 @@ class TestDecorators(TestCase):
             "('required_code', u'foo == \"bar\"'),"
             "('required_duration', u'24:59:59'),"
             "('required_fieldname', u'some.field_name'),"
-            "('required_file', u" + unicode(repr(__file__)) + "),"
+            "('required_file', u" + str(repr(__file__)) + "),"
             "('required_integer', u'100'),"
             "('required_map', 'foo'),"
             "('required_match', u'123-45-6789'),"
@@ -421,7 +423,7 @@ class TestDecorators(TestCase):
             "('set', u'bar'),"
             "('show_configuration', u'f')])")
 
-        observed = unicode(repr(command.options))
+        observed = str(repr(command.options))
         self.assertEqual(observed, expected)
 
         expected = (
@@ -433,7 +435,7 @@ class TestDecorators(TestCase):
             'required_match="123-45-6789" required_optionname="some_option_name" required_regularexpression="\\\\s+" '
             'required_set="bar" set="bar" show_configuration="f"')
 
-        observed = unicode(command.options)
+        observed = str(command.options)
 
         self.assertEqual(observed, expected)
         return

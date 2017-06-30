@@ -12,14 +12,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import sys
 
 from .event import ET
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 class EventWriter(object):
     """``EventWriter`` writes events and error messages to Splunk from a modular input.

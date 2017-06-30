@@ -24,6 +24,7 @@
 """An interactive command shell for Splunk.""" 
 from __future__ import print_function
 
+from builtins import input
 from code import compile_command, InteractiveInterpreter
 try:
     import readline # Activates readline editing, ignore for windows
@@ -72,7 +73,7 @@ class Session(InteractiveInterpreter):
 
         while True:
             try:
-                input = raw_input("> ")
+                input = input("> ")
             except EOFError:
                 print("\n\nThanks for using Splunk>.\n")
                 return
@@ -88,7 +89,7 @@ class Session(InteractiveInterpreter):
                 while True:
                     co = compile_command(input)
                     if co is not None: break
-                    input = input + '\n' + raw_input(". ") # Keep trying
+                    input = input + '\n' + input(". ") # Keep trying
             except SyntaxError:
                 self.showsyntaxerror()
                 continue

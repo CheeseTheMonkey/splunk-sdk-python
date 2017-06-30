@@ -70,7 +70,7 @@ RULES_SPLUNK = {
     }
 }
 
-FLAGS_SPLUNK = RULES_SPLUNK.keys()
+FLAGS_SPLUNK = list(RULES_SPLUNK.keys())
 
 # value: dict, args: [(dict | list | str)*]
 def dslice(value, *args):
@@ -82,7 +82,7 @@ def dslice(value, *args):
     result = {}
     for arg in args:
         if isinstance(arg, dict):
-            for k, v in arg.iteritems():
+            for k, v in arg.items():
                 if k in value: 
                     result[v] = value[k]
         elif isinstance(arg, list):

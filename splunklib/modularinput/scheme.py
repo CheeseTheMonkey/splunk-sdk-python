@@ -12,6 +12,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from builtins import str
+from builtins import object
 try:
     import xml.etree.cElementTree as ET
 except ImportError:

@@ -58,9 +58,14 @@ attributes, and methods that are specific to each kind of entity. For example::
     my_app.package()  # Creates a compressed package of this application
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 import datetime
 import json
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import logging
 from time import sleep
 from datetime import datetime, timedelta
@@ -182,7 +187,7 @@ def _trailing(template, *targets):
 def _filter_content(content, *args):
     if len(args) > 0:
         return record((k, content[k]) for k in args)
-    return record((k, v) for k, v in content.iteritems()
+    return record((k, v) for k, v in content.items()
         if k not in ['eai:acl', 'eai:attributes', 'type'])
 
 # Construct a resource path from the given base path + resource name
@@ -236,7 +241,7 @@ def _parse_atom_entry(entry):
     metadata = _parse_atom_metadata(content)
 
     # Filter some of the noise out of the content record
-    content = record((k, v) for k, v in content.iteritems()
+    content = record((k, v) for k, v in content.items()
                      if k not in ['eai:acl', 'eai:attributes'])
 
     if 'type' in content:
@@ -1081,7 +1086,7 @@ class Entity(Endpoint):
         # text to be dispatched via HTTP. However, these links are already
         # URL encoded when they arrive, and we need to mark them as such.
         unquoted_links = dict([(k, UrlEncoded(v, skip_encode=True))
-                               for k,v in results['links'].iteritems()])
+                               for k,v in results['links'].items()])
         results['links'] = unquoted_links
         return results
 
@@ -1290,7 +1295,7 @@ class ReadOnlyCollection(Endpoint):
         # This has been factored out so that it can be easily
         # overloaded by Configurations, which has to switch its
         # entities' endpoints from its own properties/ to configs/.
-        raw_path = urllib.unquote(state.links.alternate)
+        raw_path = urllib.parse.unquote(state.links.alternate)
         if 'servicesNS/' in raw_path:
             return _trailing(raw_path, 'servicesNS/', '/', '/')
         elif 'services/' in raw_path:
@@ -1757,7 +1762,7 @@ class Stanza(Entity):
         # The stanza endpoint returns all the keys at the same level in the XML as the eai information
         # and 'disabled', so to get an accurate length, we have to filter those out and have just
         # the stanza keys.
-        return len([x for x in self._state.content.keys()
+        return len([x for x in list(self._state.content.keys())
                     if not x.startswith('eai') and x != 'disabled'])
 
 
@@ -1935,7 +1940,7 @@ class Index(Entity):
         if host is not None: args['host'] = host
         if source is not None: args['source'] = source
         if sourcetype is not None: args['sourcetype'] = sourcetype
-        path = UrlEncoded(PATH_RECEIVERS_STREAM + "?" + urllib.urlencode(args), skip_encode=True)
+        path = UrlEncoded(PATH_RECEIVERS_STREAM + "?" + urllib.parse.urlencode(args), skip_encode=True)
 
         cookie_or_auth_header = "Authorization: Splunk %s\r\n" % \
                                 (self.service.token if self.service.token is _NoAuthenticationToken
@@ -1943,7 +1948,7 @@ class Index(Entity):
 
         # If we have cookie(s), use them instead of "Authorization: ..."
         if self.service.has_cookies():
-            cookie_or_auth_header = "Cookie: %s\r\n" % _make_cookie_header(self.service.get_cookies().items())
+            cookie_or_auth_header = "Cookie: %s\r\n" % _make_cookie_header(list(self.service.get_cookies().items()))
 
         # Since we need to stream to the index connection, we have to keep
         # the connection open and use the Splunk extension headers to note
@@ -2516,7 +2521,7 @@ class Inputs(Collection):
                 # Unquote the URL, since all URL encoded in the SDK
                 # should be of type UrlEncoded, and all str should not
                 # be URL encoded.
-                path = urllib.unquote(state.links.alternate)
+                path = urllib.parse.unquote(state.links.alternate)
                 entity = Input(self.service, path, kind, state=state)
                 entities.append(entity)
             return entities
@@ -2542,7 +2547,7 @@ class Inputs(Collection):
                 # Unquote the URL, since all URL encoded in the SDK
                 # should be of type UrlEncoded, and all str should not
                 # be URL encoded.
-                path = urllib.unquote(state.links.alternate)
+                path = urllib.parse.unquote(state.links.alternate)
                 entity = Input(self.service, path, kind, state=state)
                 entities.append(entity)
         if 'offset' in kwargs:
@@ -3370,7 +3375,7 @@ class Users(Collection):
         state = _parse_atom_entry(entry)
         entity = self.item(
             self.service,
-            urllib.unquote(state.links.alternate),
+            urllib.parse.unquote(state.links.alternate),
             state=state)
         return entity
 
@@ -3493,7 +3498,7 @@ class Roles(Collection):
         state = _parse_atom_entry(entry)
         entity = self.item(
             self.service,
-            urllib.unquote(state.links.alternate),
+            urllib.parse.unquote(state.links.alternate),
             state=state)
         return entity
 
@@ -3544,11 +3549,11 @@ class KVStoreCollections(Collection):
 
         :return: Result of POST request
         """
-        for k, v in indexes.iteritems():
+        for k, v in indexes.items():
             if isinstance(v, dict):
                 v = json.dumps(v)
             kwargs['index.' + k] = v
-        for k, v in fields.iteritems():
+        for k, v in fields.items():
             kwargs['field.' + k] = v
         return self.post(name=name, **kwargs)
 

@@ -16,10 +16,12 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from builtins import filter
+from builtins import map
 from .decorators import ConfigurationSetting
 from .search_command import SearchCommand
 
-from itertools import imap, ifilter
+
 
 # P1 [O] TODO: Discuss generates_timeorder in the class-level documentation for GeneratingCommand
 
@@ -307,9 +309,9 @@ class GeneratingCommand(SearchCommand):
             iteritems = SearchCommand.ConfigurationSettings.iteritems(self)
             version = self.command.protocol_version
             if version == 2:
-                iteritems = ifilter(lambda name_value1: name_value1[0] != 'distributed', iteritems)
+                iteritems = filter(lambda name_value1: name_value1[0] != 'distributed', iteritems)
                 if self.distributed and self.type == 'streaming':
-                    iteritems = imap(
+                    iteritems = map(
                         lambda name_value: (name_value[0], 'stateful') if name_value[0] == 'type' else (name_value[0], name_value[1]), iteritems)
             return iteritems
 

@@ -16,6 +16,9 @@
 
 from __future__ import print_function
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 from time import sleep
 from . import testlib
 
@@ -422,12 +425,12 @@ class TestResultsReader(unittest.TestCase):
             self.assertEqual(N_messages, 3)
 
     def test_xmldtd_filter(self):
-        from StringIO import StringIO
+        from io import StringIO
         s = results._XMLDTDFilter(StringIO("<?xml asdf awe awdf=""><boris>Other stuf</boris><?xml dafawe \n asdfaw > ab"))
         self.assertEqual(s.read(), "<boris>Other stuf</boris> ab")
 
     def test_concatenated_stream(self):
-        from StringIO import StringIO
+        from io import StringIO
         s = results._ConcatenatedStream(StringIO("This is a test "),
                                        StringIO("of the emergency broadcast system."))
         self.assertEqual(s.read(3), "Thi")

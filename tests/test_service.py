@@ -31,6 +31,7 @@ from __future__ import absolute_import
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from builtins import str
 from . import testlib
 import unittest
 
@@ -60,7 +61,7 @@ class ServiceTestCase(testlib.SDKTestCase):
             "licenseSignature", "licenseState", "master_guid", "mode", 
             "os_build", "os_name", "os_version", "serverName", "version"]
         for key in keys: 
-            self.assertTrue(key in info.keys())
+            self.assertTrue(key in list(info.keys()))
 
     def test_info_with_namespace(self):
         # Make sure we're not accessing /servicesNS/admin/search/server/info
@@ -218,12 +219,12 @@ class TestCookieAuthentication(unittest.TestCase):
         self.service.login()
         self.assertIsNotNone(self.service.get_cookies())
         # Use the cookie from the other service as the only auth param (don't need user/password)
-        service2 = client.Service(**{"cookie": "%s=%s" % self.service.get_cookies().items()[0]})
+        service2 = client.Service(**{"cookie": "%s=%s" % list(self.service.get_cookies().items())[0]})
         service2.login()
         self.assertEqual(len(service2.get_cookies()), 1)
         self.assertEqual(service2.get_cookies(), self.service.get_cookies())
         self.assertEqual(len(service2.get_cookies()), len(self.service.get_cookies()))
-        self.assertEqual(service2.get_cookies().keys()[0][:8], "splunkd_")
+        self.assertEqual(list(service2.get_cookies().keys())[0][:8], "splunkd_")
         self.assertEqual(service2.apps.get().status, 200)
 
     def test_login_fails_with_bad_cookie(self):
@@ -246,7 +247,7 @@ class TestCookieAuthentication(unittest.TestCase):
         self.assertTrue(self.service.has_cookies())
         service = client.connect(
             autologin=True,
-            cookie="%s=%s" % self.service.get_cookies().items()[0],
+            cookie="%s=%s" % list(self.service.get_cookies().items())[0],
             **self.opts.kwargs)
         self.assertTrue(service.has_cookies())
         self.service.restart(timeout=120)
@@ -297,10 +298,10 @@ class TestCookieAuthentication(unittest.TestCase):
             self.service.get_cookies().update({'bad': 'cookie'})
             self.assertEqual(service2.get_cookies(), self.service.get_cookies())
             self.assertEqual(len(service2.get_cookies()), 2)
-            self.assertEqual(service2.get_cookies().keys()[1][:8], "splunkd_")
-            self.assertTrue('bad' in service2.get_cookies().keys())
+            self.assertEqual(list(service2.get_cookies().keys())[1][:8], "splunkd_")
+            self.assertTrue('bad' in list(service2.get_cookies().keys()))
             self.assertEqual(service2.get_cookies()['bad'], 'cookie')
-            self.assertEqual(self.service.get_cookies().items(), service2.get_cookies().items())
+            self.assertEqual(list(self.service.get_cookies().items()), list(service2.get_cookies().items()))
             service2.login()
             self.assertEqual(service2.apps.get().status, 200)
 

@@ -17,6 +17,7 @@
 """Create, delete or list stanza information from/to Splunk confs."""
 from __future__ import print_function
 
+from builtins import object
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -28,7 +29,7 @@ except ImportError:
     raise Exception("Add the SDK repository to your PYTHONPATH to run the examples "
                     "(e.g., export PYTHONPATH=~/splunk-sdk-python.")
 
-class Program:
+class Program(object):
     """Break up operations into specific methods."""
     def __init__(self, service):
         self.service = service
@@ -120,7 +121,7 @@ class Program:
             for stanza in conf:
                 if (spres and argv[1] == stanza.name) or not spres:
                     print("[%s]" % stanza.name)
-                    for key, value in stanza.content.iteritems():
+                    for key, value in stanza.content.items():
                         if (kpres and argv[2] == key) or not kpres:
                             print("%s = %s" % (key, value))
                 print()

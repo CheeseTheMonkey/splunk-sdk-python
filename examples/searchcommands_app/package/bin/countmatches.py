@@ -16,6 +16,7 @@
 # under the License.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+from builtins import str
 import app
 
 from splunklib.searchcommands import dispatch, StreamingCommand, Configuration, Option, validators
@@ -64,7 +65,7 @@ class CountMatchesCommand(StreamingCommand):
         for record in records:
             count = 0
             for fieldname in self.fieldnames:
-                matches = pattern.findall(unicode(record[fieldname].decode("utf-8")))
+                matches = pattern.findall(str(record[fieldname].decode("utf-8")))
                 count += len(matches)
             record[self.fieldname] = count
             yield record

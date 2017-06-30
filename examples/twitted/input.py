@@ -15,11 +15,16 @@
 # under the License.  
 
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import input
+from builtins import str
+from builtins import object
 from pprint import pprint
 
 import base64
 from getpass import getpass
-import httplib
+import http.client
 import json
 import socket
 import sys
@@ -40,7 +45,7 @@ DEFAULT_SPLUNK_PORT = 9001
 ingest = None       # The splunk ingest socket
 verbose = 1
 
-class Twitter:
+class Twitter(object):
     def __init__(self, username, password):
         self.buffer = ""
         self.username = username
@@ -57,7 +62,7 @@ class Twitter:
             'User-Agent': "twitted.py/0.1",
             'Accept': "*/*",
         }
-        connection = httplib.HTTPSConnection(TWITTER_STREAM_HOST)
+        connection = http.client.HTTPSConnection(TWITTER_STREAM_HOST)
         connection.request("GET", TWITTER_STREAM_PATH, "", headers)
         response = connection.getresponse()
         if response.status != 200:
@@ -95,13 +100,13 @@ def cmdline():
 
     # Prompt for Twitter username/password if not provided on command line
     if 'tusername' not in kwargs:
-        kwargs['tusername'] = raw_input("Twitter username: ")
+        kwargs['tusername'] = input("Twitter username: ")
     if 'tpassword' not in kwargs:
         kwargs['tpassword'] = getpass("Twitter password:")
 
     # Prompt for Splunk username/password if not provided on command line
     if 'username' not in kwargs:
-        kwargs['username'] = raw_input("Splunk username: ")
+        kwargs['username'] = input("Splunk username: ")
     if 'password' not in kwargs:
         kwargs['password'] = getpass("Splunk password:")
 
@@ -119,7 +124,7 @@ def flatten(value, prefix=None):
                 return False
         return True
 
-    if isinstance(value, unicode):
+    if isinstance(value, str):
         return value.encode("utf8")
 
     if isinstance(value, list):
@@ -138,7 +143,7 @@ def flatten(value, prefix=None):
     if isinstance(value, dict):
         result = {}
         prefix = "%s" if prefix is None else "%s_%%s" % prefix
-        for k, v in value.iteritems():
+        for k, v in value.items():
             k = prefix % str(k)
             v = flatten(v, k)
             if not isinstance(v, dict): v = {k:v}
@@ -242,7 +247,7 @@ def main():
     verbose = kwargs['verbose']
 
     # Force the owner namespace, if not provided
-    if 'owner' not in kwargs.keys():
+    if 'owner' not in list(kwargs.keys()):
         kwargs['owner'] = kwargs['username']
 
     if verbose > 0: print("Initializing Splunk ..")

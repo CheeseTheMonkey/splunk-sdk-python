@@ -31,6 +31,8 @@ from __future__ import absolute_import
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from builtins import str
+from builtins import range
 from . import testlib
 try:
     import unittest
@@ -51,7 +53,7 @@ class KVStoreBatchTestCase(testlib.SDKTestCase):
         self.col = confs['test'].data
 
     def test_insert_find_update_data(self):
-        data = map(lambda x: {'_key': str(x), 'data': '#' + str(x), 'num': x}, range(1000))
+        data = [{'_key': str(x), 'data': '#' + str(x), 'num': x} for x in range(1000)]
         self.col.batch_save(*data)
 
         testData = self.col.query(sort='num')
@@ -62,7 +64,7 @@ class KVStoreBatchTestCase(testlib.SDKTestCase):
             self.assertEqual(testData[x]['data'], '#' + str(x))
             self.assertEqual(testData[x]['num'], x)
 
-        data = map(lambda x: {'_key': str(x), 'data': '#' + str(x + 1), 'num': x + 1}, range(1000))
+        data = [{'_key': str(x), 'data': '#' + str(x + 1), 'num': x + 1} for x in range(1000)]
         self.col.batch_save(*data)
 
         testData = self.col.query(sort='num')
@@ -73,7 +75,7 @@ class KVStoreBatchTestCase(testlib.SDKTestCase):
             self.assertEqual(testData[x]['data'], '#' + str(x + 1))
             self.assertEqual(testData[x]['num'], x + 1)
 
-        query = map(lambda x: {"query": {"num": x + 1}}, range(100))
+        query = [{"query": {"num": x + 1}} for x in range(100)]
         testData = self.col.batch_find(*query)
 
         self.assertEqual(len(testData), 100)

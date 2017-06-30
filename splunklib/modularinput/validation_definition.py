@@ -13,6 +13,7 @@
 # under the License.
 
 
+from builtins import object
 try:
     import xml.etree.cElementTree as ET
 except ImportError as ie:

@@ -14,14 +14,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 from tests.modularinput.modularinput_testlib import unittest, xml_compare, data_open
 from splunklib.modularinput.event import Event, ET
 from splunklib.modularinput.event_writer import EventWriter
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 class EventTestCase(unittest.TestCase):
     def test_event_without_enough_fields_fails(self):

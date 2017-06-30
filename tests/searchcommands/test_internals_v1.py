@@ -16,6 +16,11 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import zip
+from builtins import str
+from builtins import range
 from splunklib.searchcommands.internals import CommandLineParser, InputHeader, RecordWriterV1
 from splunklib.searchcommands.decorators import Configuration, Option
 from splunklib.searchcommands.validators import Boolean
@@ -23,8 +28,8 @@ from splunklib.searchcommands.validators import Boolean
 from splunklib.searchcommands.search_command import SearchCommand
 
 from contextlib import closing
-from cStringIO import StringIO
-from itertools import izip
+from io import StringIO
+
 from unittest import main, TestCase
 
 import os
@@ -55,7 +60,7 @@ class TestInternals(TestCase):
         command = TestCommandLineParserCommand()
         CommandLineParser.parse(command, options)
 
-        for option in command.options.itervalues():
+        for option in command.options.values():
             if option.name in ['logging_configuration', 'logging_level', 'record', 'show_configuration']:
                 self.assertFalse(option.is_set)
                 continue
@@ -72,7 +77,7 @@ class TestInternals(TestCase):
         command = TestCommandLineParserCommand()
         CommandLineParser.parse(command, options + fieldnames)
 
-        for option in command.options.itervalues():
+        for option in command.options.values():
             if option.name in ['logging_configuration', 'logging_level', 'record', 'show_configuration']:
                 self.assertFalse(option.is_set)
                 continue
@@ -87,7 +92,7 @@ class TestInternals(TestCase):
         command = TestCommandLineParserCommand()
         CommandLineParser.parse(command, ['required_option=true'] + fieldnames)
 
-        for option in command.options.itervalues():
+        for option in command.options.values():
             if option.name in ['unnecessary_option', 'logging_configuration', 'logging_level', 'record', 'show_configuration']:
                 self.assertFalse(option.is_set)
                 continue
@@ -139,19 +144,19 @@ class TestInternals(TestCase):
             r'"Hello World!"'
         ]
 
-        for string, expected_value in izip(strings, expected_values):
+        for string, expected_value in zip(strings, expected_values):
             command = TestCommandLineParserCommand()
             argv = ['text', '=', string]
             CommandLineParser.parse(command, argv)
             self.assertEqual(command.text, expected_value)
 
-        for string, expected_value in izip(strings, expected_values):
+        for string, expected_value in zip(strings, expected_values):
             command = TestCommandLineParserCommand()
             argv = [string]
             CommandLineParser.parse(command, argv)
             self.assertEqual(command.fieldnames[0], expected_value)
 
-        for string, expected_value in izip(strings, expected_values):
+        for string, expected_value in zip(strings, expected_values):
             command = TestCommandLineParserCommand()
             argv = ['text', '=', string] + strings
             CommandLineParser.parse(command, argv)
@@ -282,7 +287,7 @@ class TestInternals(TestCase):
             'sentence': 'hello world!'}
 
         input_header = InputHeader()
-        text = reduce(lambda value, item: value + '{}:{}\n'.format(item[0], item[1]), collection.iteritems(), '') + '\n'
+        text = reduce(lambda value, item: value + '{}:{}\n'.format(item[0], item[1]), iter(collection.items()), '') + '\n'
 
         with closing(StringIO(text.encode())) as input_file:
             input_header.read(input_file)

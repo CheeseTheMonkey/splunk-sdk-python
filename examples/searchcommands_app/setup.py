@@ -4,6 +4,7 @@
 # Copyright © Splunk, Inc. All rights reserved.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+from builtins import str
 import os
 
 if os.name == 'nt':
@@ -179,7 +180,7 @@ class BuildCommand(Command):
         if not (self.scp_version == 1 or self.scp_version == 2):
             raise SystemError('Expected an SCP version number of 1 or 2, not {}'.format(self.scp_version))
 
-        self.package_name = self.package_name + '-' + unicode(self.build_number)
+        self.package_name = self.package_name + '-' + str(self.build_number)
         return
 
     def run(self):
@@ -232,7 +233,7 @@ class BuildCommand(Command):
         return
 
     def _copy_package_data(self):
-        for directory, path_list in self.distribution.package_data.iteritems():
+        for directory, path_list in self.distribution.package_data.items():
             target = os.path.join(self.build_dir, directory)
             if not os.path.isdir(target):
                 os.makedirs(target)

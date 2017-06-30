@@ -12,6 +12,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 from tests.modularinput.modularinput_testlib import unittest, xml_compare, data_open
 from splunklib.client import Service
 from splunklib.modularinput.argument import Argument
@@ -21,9 +24,9 @@ from splunklib.modularinput.script import Script
 from splunklib.modularinput.scheme import Scheme
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 try:
     import xml.etree.cElementTree as ET

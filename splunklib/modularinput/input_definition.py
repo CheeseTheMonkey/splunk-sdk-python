@@ -12,6 +12,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from builtins import object
 try:
     import xml.etree.cElementTree as ET
 except ImportError as ie:
@@ -19,7 +20,7 @@ except ImportError as ie:
 
 from .utils import parse_xml_data
 
-class InputDefinition:
+class InputDefinition(object):
     """``InputDefinition`` encodes the XML defining inputs that Splunk passes to
     a modular input script.
 

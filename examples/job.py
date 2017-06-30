@@ -22,6 +22,8 @@ from __future__ import print_function
 # jobs, eg: @0 would specify the frist job in the list, @1 the second, and so
 # on.
 
+from builtins import next
+from builtins import object
 from pprint import pprint
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -116,7 +118,7 @@ def output(stream):
         if len(content) == 0: break
         sys.stdout.write(content)
 
-class Program:
+class Program(object):
     def __init__(self, service):
         self.service = service
 

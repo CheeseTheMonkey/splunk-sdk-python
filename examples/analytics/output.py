@@ -14,6 +14,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from builtins import object
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 import splunklib.client as client
@@ -37,7 +38,7 @@ DISTINCT_KEY = "distinct_id"
 EVENT_TERMINATOR = "\\r\\n-----end-event-----\\r\\n"
 PROPERTY_PREFIX = "analytics_prop__"
 
-class TimeRange:
+class TimeRange(object):
     DAY="1d"
     WEEK="1w"
     MONTH="1mon"    
@@ -54,7 +55,7 @@ def counts(job, result_key):
     return applications
     
 
-class AnalyticsRetriever:
+class AnalyticsRetriever(object):
     def __init__(self, application_name, splunk_info, index = ANALYTICS_INDEX_NAME):
         self.application_name = application_name
         self.splunk = client.connect(**splunk_info)
@@ -81,7 +82,7 @@ class AnalyticsRetriever:
         for result in reader:
             if not isinstance(result, dict):
                 continue
-            for field, count in result.iteritems():
+            for field, count in result.items():
                 # Ignore internal ResultsReader properties
                 if field.startswith("$"):
                     continue
@@ -131,7 +132,7 @@ class AnalyticsRetriever:
 
                 # The rest is in the form of [event/property]:count
                 # pairs, so we decode those
-                for key,count in result.iteritems():
+                for key,count in result.items():
                     # Ignore internal ResultsReader properties
                     if key.startswith("$"):
                         continue

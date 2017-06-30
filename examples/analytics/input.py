@@ -14,6 +14,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from builtins import object
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from datetime import datetime
@@ -37,7 +38,7 @@ DISTINCT_KEY = "distinct_id"
 EVENT_TERMINATOR = "\\r\\n-----end-event-----\\r\\n"
 PROPERTY_PREFIX = "analytics_prop__"
 
-class AnalyticsTracker:
+class AnalyticsTracker(object):
     def __init__(self, application_name, splunk_info, index = ANALYTICS_INDEX_NAME):
         self.application_name = application_name
         self.splunk = client.connect(**splunk_info)
@@ -60,7 +61,7 @@ class AnalyticsTracker:
     @staticmethod
     def encode(props):
         encoded = " "
-        for k,v in props.iteritems():
+        for k,v in props.items():
             # We disallow dictionaries - it doesn't quite make sense.
             assert(not isinstance(v, dict))
 
@@ -84,12 +85,12 @@ class AnalyticsTracker:
             APPLICATION_KEY, self.application_name, 
             EVENT_KEY, event_name)
 
-        assert(not APPLICATION_KEY in props.keys())
-        assert(not EVENT_KEY in props.keys())
+        assert(not APPLICATION_KEY in list(props.keys()))
+        assert(not EVENT_KEY in list(props.keys()))
 
         if distinct_id is not None:
             event += ('%s="%s" ' % (DISTINCT_KEY, distinct_id))
-            assert(not DISTINCT_KEY in props.keys())
+            assert(not DISTINCT_KEY in list(props.keys()))
 
         event += AnalyticsTracker.encode(props)
 

@@ -15,15 +15,17 @@
 # under the License.
 
 from __future__ import print_function
-import SimpleHTTPServer
-import SocketServer
-import urllib2
+from future import standard_library
+standard_library.install_aliases()
+import http.server
+import socketserver
+import urllib.request, urllib.error, urllib.parse
 import sys
-import StringIO
+import io
 
 PORT = 8080
 
-class RedirectHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class RedirectHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         redirect_url, headers = self.get_url_and_headers()
         if redirect_url is None:
@@ -63,7 +65,7 @@ class RedirectHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def get_url_and_headers(self):
         # Collect all the headers
         headers = {}
-        for header_name in self.headers.keys():
+        for header_name in list(self.headers.keys()):
             headers[header_name] = self.headers.getheader(header_name)
 
         # Get the redirect URL and remove it from the headers
@@ -81,13 +83,13 @@ class RedirectHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         try:
             # Make the request
-            request = urllib2.Request(url, data, headers)
+            request = urllib.request.Request(url, data, headers)
             request.get_method = lambda: method
-            response = urllib2.urlopen(request)
+            response = urllib.request.urlopen(request)
 
             # We were successful, so send the response code
             self.send_response(response.code, message=response.msg)
-            for key, value in dict(response.headers).iteritems():
+            for key, value in dict(response.headers).items():
                 # Optionally log the headers
                 #self.log_message("%s: %s" % (key, value))
 
@@ -103,16 +105,16 @@ class RedirectHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
             # Copy the response to the output
             self.copyfile(response, self.wfile)
-        except urllib2.HTTPError as e:
+        except urllib.error.HTTPError as e:
             # On errors, log the response code and message
             self.log_message("Code: %s (%s)", e.code, e.msg)
 
-            for key, value in dict(e.hdrs).iteritems():
+            for key, value in dict(e.hdrs).items():
                 # On errors, we always log the headers
                 self.log_message("%s: %s", key, value)
 
             response_text = e.fp.read()
-            response_file = StringIO.StringIO(response_text)
+            response_file = io.StringIO(response_text)
 
             # On errors, we also log the response text
             self.log_message("Response: %s", response_text)
@@ -133,10 +135,10 @@ class RedirectHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             # Finally, send the error itself
             self.copyfile(response_file, self.wfile)
         
-class ReuseableSocketTCPServer(SocketServer.TCPServer):
+class ReuseableSocketTCPServer(socketserver.TCPServer):
     def __init__(self, *args, **kwargs):
         self.allow_reuse_address = True
-        SocketServer.TCPServer.__init__(self, *args, **kwargs)
+        socketserver.TCPServer.__init__(self, *args, **kwargs)
 
 def serve(port = PORT):
     Handler = RedirectHandler

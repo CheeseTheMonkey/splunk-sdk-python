@@ -16,13 +16,18 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import zip
+from builtins import str
+from builtins import next
 from splunklib.searchcommands import Configuration, StreamingCommand
 from splunklib.searchcommands.decorators import ConfigurationSetting, Option
 from splunklib.searchcommands.search_command import SearchCommand
 from splunklib.client import Service
 
-from cStringIO import StringIO
-from itertools import izip
+from io import StringIO
+
 from json.encoder import encode_basestring as encode_string
 from unittest import main, TestCase
 
@@ -196,8 +201,8 @@ class TestSearchCommand(TestCase):
         result.reset()
         reader = csv.reader(result)
         self.assertEqual([], next(reader))
-        observed = dict(izip(next(reader), next(reader)))
-        self.assertRaises(StopIteration, reader.next)
+        observed = dict(zip(next(reader), next(reader)))
+        self.assertRaises(StopIteration, reader.__next__)
 
         expected = {
             'clear_required_fields': '1',                '__mv_clear_required_fields': '',

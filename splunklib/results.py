@@ -32,6 +32,11 @@ as follows:::
     print "Results are a preview: %s" % reader.is_preview
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import next
+from past.builtins import basestring
+from builtins import object
 try:
     import xml.etree.cElementTree as et
 except:
@@ -43,9 +48,9 @@ except ImportError:
     from .ordereddict import OrderedDict
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except:
-    from StringIO import StringIO
+    from io import StringIO
 
 __all__ = [
     "ResultsReader",
@@ -201,7 +206,7 @@ class ResultsReader(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         return next(self._gen)
 
     def _parse_results(self, stream):

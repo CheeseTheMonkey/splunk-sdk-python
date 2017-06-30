@@ -16,8 +16,11 @@
    using Python's httplib module."""
 from __future__ import print_function
 
-import httplib
-import urllib
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+import http.client
+import urllib.request, urllib.parse, urllib.error
 from xml.etree import ElementTree
 
 HOST = "localhost"
@@ -26,8 +29,8 @@ USERNAME = "admin"
 PASSWORD = "changeme"
 
 # Present credentials to Splunk and retrieve the session key
-connection = httplib.HTTPSConnection(HOST, PORT)
-body = urllib.urlencode({'username': USERNAME, 'password': PASSWORD})
+connection = http.client.HTTPSConnection(HOST, PORT)
+body = urllib.parse.urlencode({'username': USERNAME, 'password': PASSWORD})
 headers = { 
     'Content-Type': "application/x-www-form-urlencoded", 
     'Content-Length': str(len(body)),
@@ -46,7 +49,7 @@ body = response.read()
 sessionKey = ElementTree.XML(body).findtext("./sessionKey")
 
 # Now make the request to Splunk for list of installed apps
-connection = httplib.HTTPSConnection(HOST, PORT)
+connection = http.client.HTTPSConnection(HOST, PORT)
 headers = { 
     'Content-Length': "0",
     'Host': HOST,

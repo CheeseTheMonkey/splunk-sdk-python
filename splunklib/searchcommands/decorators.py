@@ -16,6 +16,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from builtins import str
+from builtins import object
 try:
     from collections import OrderedDict  # must be python 2.7
 except ImportError:
@@ -70,7 +72,7 @@ class Configuration(object):
             name = o.__name__
             if name.endswith(b'Command'):
                 name = name[:-len(b'Command')]
-            o.name = unicode(name.lower())
+            o.name = str(name.lower())
 
             # Construct ConfigurationSettings instance for the command class
 
@@ -137,7 +139,7 @@ class ConfigurationSetting(property):
         for name, setting in definitions:
 
             if setting._name is None:
-                setting._name = name = unicode(name)
+                setting._name = name = str(name)
             else:
                 name = setting._name
 
@@ -194,7 +196,7 @@ class ConfigurationSetting(property):
             del values[name]
 
         if len(values) > 0:
-            settings = sorted(list(values.iteritems()))
+            settings = sorted(list(values.items()))
             settings = ('{}={}'.format(n, repr(v)) for n, v in settings)
             raise AttributeError('Inapplicable configuration settings: ' + ', '.join(settings))
 
@@ -356,7 +358,7 @@ class Option(property):
             self._option = option
             self._is_set = False
             validator = self.validator
-            self._format = unicode if validator is None else validator.format
+            self._format = str if validator is None else validator.format
 
         def __repr__(self):
             return '(' + repr(self.name) + ', ' + repr(self._format(self.value)) + ')'
@@ -419,21 +421,21 @@ class Option(property):
             OrderedDict.__init__(self, ((option.name, item_class(command, option)) for _, option in definitions))
 
         def __repr__(self):
-            text = 'Option.View([' + ','.join((repr(item) for item in self.itervalues())) + '])'
+            text = 'Option.View([' + ','.join((repr(item) for item in self.values())) + '])'
             return text
 
         def __str__(self):
-            text = ' '.join([str(item) for item in self.itervalues() if item.is_set])
+            text = ' '.join([str(item) for item in self.values() if item.is_set])
             return text
 
         # region Methods
 
         def get_missing(self):
-            missing = [item.name for item in self.itervalues() if item.is_required and not item.is_set]
+            missing = [item.name for item in self.values() if item.is_required and not item.is_set]
             return missing if len(missing) > 0 else None
 
         def reset(self):
-            for value in self.itervalues():
+            for value in self.values():
                 value.reset()
 
         pass

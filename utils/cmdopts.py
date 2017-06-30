@@ -48,7 +48,7 @@ class Parser(OptionParser):
     def init(self, rules):
         """Initialize the parser with the given command rules."""
         # Initialize the option parser
-        for dest in rules.keys():
+        for dest in list(rules.keys()):
             rule = rules[dest]
 
             # Assign defaults ourselves here, instead of in the option parser

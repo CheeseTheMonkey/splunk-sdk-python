@@ -15,6 +15,9 @@
 # under the License.
 
 from __future__ import absolute_import
+from __future__ import division
+from builtins import zip
+from past.utils import old_div
 import datetime
 from . import testlib
 import logging
@@ -172,7 +175,7 @@ class TestSavedSearch(testlib.SDKTestCase):
         logging.debug("Scheduled times: %s", scheduled_times)
         self.assertTrue(all([isinstance(x, datetime.datetime) 
                              for x in scheduled_times]))
-        time_pairs = zip(scheduled_times[:-1], scheduled_times[1:])
+        time_pairs = list(zip(scheduled_times[:-1], scheduled_times[1:]))
         for earlier, later in time_pairs:
             diff = later-earlier
             # diff is an instance of datetime.timedelta, which
@@ -180,7 +183,7 @@ class TestSavedSearch(testlib.SDKTestCase):
             # Since we support Python 2.6, we have to calculate the
             # total seconds ourselves.
             total_seconds = diff.days*24*60*60 + diff.seconds
-            self.assertEqual(total_seconds/60.0, 5)
+            self.assertEqual(old_div(total_seconds,60.0), 5)
 
     def test_no_equality(self):
         self.assertRaises(client.IncomparableException,

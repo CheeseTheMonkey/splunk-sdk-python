@@ -16,6 +16,7 @@
 
 """Shared unit test utilities."""
 from __future__ import print_function
+from builtins import str
 import contextlib
 
 import sys
@@ -95,7 +96,7 @@ class SDKTestCase(unittest.TestCase):
             logging.debug("wait finished after %s seconds", datetime.now()-start)
 
     def check_content(self, entity, **kwargs):
-        for k, v in kwargs.iteritems(): 
+        for k, v in kwargs.items(): 
             self.assertEqual(entity[k], str(v))
 
     def check_entity(self, entity):

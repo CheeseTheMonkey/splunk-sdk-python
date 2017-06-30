@@ -145,7 +145,7 @@ class IndexTest(testlib.SDKTestCase):
 
         event_count = int(self.service.indexes[self.index_name]['totalEventCount'])
 
-        cookie = "%s=%s" % (self.service.http._cookies.items()[0])
+        cookie = "%s=%s" % (list(self.service.http._cookies.items())[0])
         service = client.Service(**{"cookie": cookie})
         service.login()
         cn = service.indexes[self.index_name].attach()

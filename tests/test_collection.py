@@ -15,6 +15,7 @@
 # under the License.
 
 from __future__ import absolute_import
+from __future__ import division
 #!/usr/bin/env python
 #
 # Copyright 2011-2015 Splunk, Inc.
@@ -31,6 +32,9 @@ from __future__ import absolute_import
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from builtins import str
+from builtins import range
+from past.utils import old_div
 from . import testlib
 import logging
 
@@ -222,7 +226,7 @@ class CollectionTestCase(testlib.SDKTestCase):
                 logging.debug("No entities in collection %s; skipping test.", coll_name)
             total = len(expected)
             found = []
-            for ent in coll.iter(pagesize=max(int(total/5.0), 1), count=10):
+            for ent in coll.iter(pagesize=max(int(old_div(total,5.0)), 1), count=10):
                 found.append(ent.name)
             self.assertEqual(expected, found,
                              msg='on %s (expected: %s, found: %s)' % \
@@ -235,7 +239,7 @@ class CollectionTestCase(testlib.SDKTestCase):
             if len(expected) == 0:
                 logging.debug("No entities in collection %s; skipping test.", coll_name)
             total = len(expected)
-            page_size = max(int(total/5.0), 1)
+            page_size = max(int(old_div(total,5.0)), 1)
             found = []
             offset = 0
             while offset < total:

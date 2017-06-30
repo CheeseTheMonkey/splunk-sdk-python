@@ -14,6 +14,7 @@
 
 # File for utility functions
 
+from builtins import zip
 def xml_compare(expected, found):
     """Checks equality of two ``ElementTree`` objects.
 

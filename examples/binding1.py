@@ -19,6 +19,7 @@
    binds to a sampling of endpoints showing how to access collections,
    entities and 'method-like' endpoints."""
 
+from builtins import object
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -31,7 +32,7 @@ except ImportError:
                     "(e.g., export PYTHONPATH=~/splunk-sdk-python.")
 
 
-class Service:
+class Service(object):
     def __init__(self, context):
         self.context = context
 

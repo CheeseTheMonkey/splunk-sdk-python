@@ -12,14 +12,19 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 from abc import ABCMeta, abstractmethod
-from urlparse import urlsplit
+from urllib.parse import urlsplit
 import sys
 
 from ..client import Service
 from .event_writer import EventWriter
 from .input_definition import InputDefinition
 from .validation_definition import ValidationDefinition
+from future.utils import with_metaclass
 
 try:
     import xml.etree.cElementTree as ET
@@ -27,7 +32,7 @@ except ImportError:
     import xml.etree.ElementTree as ET
 
 
-class Script(object):
+class Script(with_metaclass(ABCMeta, object)):
     """An abstract base class for implementing modular inputs.
 
     Subclasses should override ``get_scheme``, ``stream_events``,
@@ -37,7 +42,6 @@ class Script(object):
     The ``run`` function is used to run modular inputs; it typically should
     not be overridden.
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self):
         self._input_definition = None

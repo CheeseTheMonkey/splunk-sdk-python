@@ -15,6 +15,7 @@
 # under the License.
 
 from __future__ import absolute_import
+from past.builtins import basestring
 import os
 from subprocess import PIPE, Popen
 import time
@@ -354,7 +355,7 @@ class ExamplesTestCase(testlib.SDKTestCase):
         for prop in properties:
             name = prop["name"]
             count = prop["count"]
-            self.assertTrue(name in expected_properties.keys())
+            self.assertTrue(name in list(expected_properties.keys()))
             self.assertEqual(count, expected_properties[name])
 
         # Assert property values
@@ -367,7 +368,7 @@ class ExamplesTestCase(testlib.SDKTestCase):
         for value in values:
             name = value["name"]
             count = value["count"]
-            self.assertTrue(name in expected_property_values.keys())
+            self.assertTrue(name in list(expected_property_values.keys()))
             self.assertEqual(count, expected_property_values[name])
 
         # Assert event over time

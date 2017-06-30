@@ -1,6 +1,10 @@
 #!/usr/bin/python
  
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 __doc__ = """Tiny HTTP Proxy.
  
 This module implements GET, HEAD, POST, PUT and DELETE methods
@@ -21,7 +25,7 @@ Any help will be greatly appreciated.       SUZUKI Hisao
  
 __version__ = "0.3.1"
  
-import BaseHTTPServer, select, socket, SocketServer, urlparse
+import http.server, select, socket, socketserver, urllib.parse
 import logging
 import logging.handlers
 import getopt
@@ -35,8 +39,8 @@ import ftplib
  
 DEFAULT_LOG_FILENAME = "proxy.log"
  
-class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
-    __base = BaseHTTPServer.BaseHTTPRequestHandler
+class ProxyHandler (http.server.BaseHTTPRequestHandler):
+    __base = http.server.BaseHTTPRequestHandler
     __base_handle = __base.handle
  
     server_version = "TinyHTTPProxy/" + __version__
@@ -88,7 +92,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
             self.connection.close()
  
     def do_GET(self):
-        (scm, netloc, path, params, query, fragment) = urlparse.urlparse(
+        (scm, netloc, path, params, query, fragment) = urllib.parse.urlparse(
             self.path, 'http')
         if scm not in ('http', 'ftp') or fragment or not netloc:
             self.send_error(400, "bad url %s" % self.path)
@@ -100,13 +104,13 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                 if soc:
                     self.log_request()
                     soc.send("%s %s %s\r\n" % (self.command,
-                                               urlparse.urlunparse(('', '', path,
+                                               urllib.parse.urlunparse(('', '', path,
                                                                     params, query,
                                                                     '')),
                                                self.request_version))
                     self.headers['Connection'] = 'close'
                     del self.headers['Proxy-Connection']
-                    for key_val in self.headers.items():
+                    for key_val in list(self.headers.items()):
                         soc.send("%s: %s\r\n" % key_val)
                     soc.send("\r\n")
                     self._read_write(soc)
@@ -167,10 +171,10 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         self.server.logger.log (logging.ERROR, "%s %s", self.address_string (),
                                 format % args)
  
-class ThreadingHTTPServer (SocketServer.ThreadingMixIn,
-                           BaseHTTPServer.HTTPServer):
+class ThreadingHTTPServer (socketserver.ThreadingMixIn,
+                           http.server.HTTPServer):
     def __init__ (self, server_address, RequestHandlerClass, logger=None):
-        BaseHTTPServer.HTTPServer.__init__ (self, server_address,
+        http.server.HTTPServer.__init__ (self, server_address,
                                             RequestHandlerClass)
         self.logger = logger
  
@@ -222,7 +226,7 @@ def daemonize_part2 (logger):
         def read (self, *args, **kwargs): return 0
         def fileno (self): return self.fd
         def close (self): os.close (self.fd)
-    class ErrorLog:
+    class ErrorLog(object):
         def __init__ (self, obj): self.obj = obj
         def write (self, string): self.obj.log (logging.ERROR, string)
         def read (self, *args, **kwargs): return 0
