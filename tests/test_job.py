@@ -14,6 +14,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from __future__ import print_function
 from time import sleep
 import testlib
 
@@ -209,7 +210,7 @@ class TestJobWithDelayedDone(testlib.SDKTestCase):
 
     def test_enable_preview(self):
         if not self.app_collection_installed():
-            print "Test requires sdk-app-collection. Skipping."
+            print("Test requires sdk-app-collection. Skipping.")
             return
         self.install_app_from_collection("sleep_command")
         sleep_duration = 100
@@ -235,7 +236,7 @@ class TestJobWithDelayedDone(testlib.SDKTestCase):
 
     def test_setpriority(self):
         if not self.app_collection_installed():
-            print "Test requires sdk-app-collection. Skipping."
+            print("Test requires sdk-app-collection. Skipping.")
             return
         self.install_app_from_collection("sleep_command")
         sleep_duration = 100

@@ -14,6 +14,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from __future__ import print_function
 import SimpleHTTPServer
 import SocketServer
 import urllib2
@@ -142,7 +143,7 @@ def serve(port = PORT):
     
     httpd = ReuseableSocketTCPServer(("", int(port)), Handler)
     
-    print "API Explorer -- Port: %s" % int(port)
+    print("API Explorer -- Port: %s" % int(port))
     
     httpd.serve_forever()
 

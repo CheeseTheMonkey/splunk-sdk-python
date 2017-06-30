@@ -14,6 +14,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from __future__ import print_function
 from setuptools import setup, Command
 from contextlib import closing
 from subprocess import check_call, STDOUT
@@ -89,7 +90,7 @@ class CoverageCommand(Command):
         try:
             import coverage
         except ImportError:
-            print "Could not import coverage. Please install it and try again."
+            print("Could not import coverage. Please install it and try again.")
             exit(1)
         cov = coverage.coverage(source=['splunklib'])
         cov.start()

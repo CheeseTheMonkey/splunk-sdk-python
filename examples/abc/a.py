@@ -14,6 +14,7 @@
 
 """Retrieves a list of installed apps from Splunk by making REST API calls
    using Python's httplib module."""
+from __future__ import print_function
 
 import httplib
 import urllib
@@ -65,4 +66,4 @@ body = response.read()
 data = ElementTree.XML(body)
 apps = data.findall("{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}title")
 for app in apps: 
-    print app.text
+    print(app.text)

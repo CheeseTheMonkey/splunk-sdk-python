@@ -15,6 +15,7 @@
 # under the License.
 
 """A tool to generate event data to a named index."""
+from __future__ import print_function
 
 import socket
 import sys, os
@@ -63,7 +64,7 @@ def feed_index(service, opts):
     try:
         index = service.indexes[indexname]
     except KeyError:
-        print "Index %s not found" % indexname
+        print("Index %s not found" % indexname)
         return
 
     if itype in ["stream", "submit"]:
@@ -96,25 +97,25 @@ def feed_index(service, opts):
 
                 count = count + 1
             
-            print "submitted %d events, sleeping 1 second" % count
+            print("submitted %d events, sleeping 1 second" % count)
             time.sleep(1)
     except KeyboardInterrupt:
-        print "^C detected, last event written:"
-        print lastevent
+        print("^C detected, last event written:")
+        print(lastevent)
 
 def main():
     usage = "usage: %prog [options] <command> [<args>]"
 
     argv = sys.argv[1:]
     if len(argv) == 0:
-        print "must supply an index name"
+        print("must supply an index name")
         sys.exit(1)
 
     opts = parse(argv, RULES, ".splunkrc", usage=usage)
     service = connect(**opts.kwargs)
 
     if opts.kwargs['ingest'] not in INGEST_TYPE:
-        print "ingest type must be in set %s" % INGEST_TYPE
+        print("ingest type must be in set %s" % INGEST_TYPE)
         sys.exit(1)
 
     feed_index(service, opts)

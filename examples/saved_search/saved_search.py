@@ -16,6 +16,7 @@
 
 """A command line utility for manipulating saved searches 
    (list-all/create/list/delete)."""
+from __future__ import print_function
 
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -187,11 +188,11 @@ def main(argv):
     if (operation != "list" and operation != "create" 
                             and operation != "delete"
                             and operation != "list-all"):
-        print "operation %s not one of list-all, list, create, delete" % operation
+        print("operation %s not one of list-all, list, create, delete" % operation)
         sys.exit(0)
 
     if not kwargs.has_key('name') and operation != "list-all":
-        print "operation requires a name"
+        print("operation requires a name")
         sys.exit(0)
 
     # remove arg 'name' from passing through to operation builder, except on create
@@ -208,7 +209,7 @@ def main(argv):
         result = context.post("saved/searches", **kwargs)
     else:
         result = context.delete("saved/searches/%s" % name, **kwargs)
-    print "HTTP STATUS: %d" % result.status
+    print("HTTP STATUS: %d" % result.status)
     xml_data = result.body.read()
     sys.stdout.write(xml_data)
 

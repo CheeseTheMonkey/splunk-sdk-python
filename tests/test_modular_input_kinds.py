@@ -14,6 +14,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from __future__ import print_function
 import testlib
 try:
     import unittest
@@ -28,7 +29,7 @@ class ModularInputKindTestCase(testlib.SDKTestCase):
 
     def test_list_arguments(self):
         if not self.app_collection_installed():
-            print "Test requires sdk-app-collection. Skipping."
+            print("Test requires sdk-app-collection. Skipping.")
             return
         self.install_app_from_collection("modular-inputs")
 
@@ -47,7 +48,7 @@ class ModularInputKindTestCase(testlib.SDKTestCase):
 
     def test_update_raises_exception(self):
         if not self.app_collection_installed():
-            print "Test requires sdk-app-collection. Skipping."
+            print("Test requires sdk-app-collection. Skipping.")
             return
         self.install_app_from_collection("modular-inputs")
 
@@ -68,7 +69,7 @@ class ModularInputKindTestCase(testlib.SDKTestCase):
 
     def test_list_modular_inputs(self):
         if not self.app_collection_installed():
-            print "Test requires sdk-app-collection. Skipping."
+            print("Test requires sdk-app-collection. Skipping.")
             return
         self.install_app_from_collection("modular-inputs")
 

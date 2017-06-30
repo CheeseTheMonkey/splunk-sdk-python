@@ -15,6 +15,7 @@
 # under the License.
 
 """Shared unit test utilities."""
+from __future__ import print_function
 import contextlib
 
 import sys
@@ -259,6 +260,6 @@ class SDKTestCase(unittest.TestCase):
                 except HTTPError as error:
                     if not (os.name == 'nt' and error.status == 500):
                         raise
-                    print 'Ignoring failure to delete {0} during tear down: {1}'.format(appName, error)
+                    print('Ignoring failure to delete {0} during tear down: {1}'.format(appName, error))
         if self.service.restart_required:
             self.clear_restart_message()

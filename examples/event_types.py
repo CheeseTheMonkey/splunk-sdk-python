@@ -15,6 +15,7 @@
 # under the License.
 
 """A command line utility that lists Splunk event types."""
+from __future__ import print_function
 
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -32,13 +33,13 @@ def main():
     service = connect(**opts.kwargs)
 
     for item in service.event_types:
-        print "%s" % item.name
-        print '='*len(item.name)
+        print("%s" % item.name)
+        print('='*len(item.name))
         content = item.content
         for key in sorted(content.keys()):
             value = content[key]
-            print "%s: %s" % (key, value)
-        print
+            print("%s: %s" % (key, value))
+        print()
 
 if __name__ == "__main__":
     main()

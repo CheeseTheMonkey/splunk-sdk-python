@@ -14,6 +14,7 @@
 # License for the specific language governing permissions and limitations 
 # under the License.  
 
+from __future__ import print_function
 from pprint import pprint
 
 import base64
@@ -220,14 +221,14 @@ def print_record(record):
 
     # Otherwise print a nice summary of the record
     if record.has_key('delete_status_id'):
-        print "delete %d %d" % (
+        print("delete %d %d" % (
             record['delete_status_id'],
-            record['delete_status_user_id'])
+            record['delete_status_user_id']))
     else:
-        print "status %s %d %d" % (
+        print("status %s %d %d" % (
             record['created_at'], 
             record['id'], 
-            record['user_id'])
+            record['user_id']))
 
 def process(status):
     status = json.loads(status)
@@ -244,12 +245,12 @@ def main():
     if 'owner' not in kwargs.keys():
         kwargs['owner'] = kwargs['username']
 
-    if verbose > 0: print "Initializing Splunk .."
+    if verbose > 0: print("Initializing Splunk ..")
     service = client.connect(**kwargs)
 
     # Create the index if it doesn't exist
     if 'twitter' not in service.indexes:
-        if verbose > 0: print "Creating index 'twitter' .."
+        if verbose > 0: print("Creating index 'twitter' ..")
         service.indexes.create("twitter")
 
     # Create the TCP input if it doesn't exist
@@ -257,7 +258,7 @@ def main():
     input_port = kwargs.get("inputport", DEFAULT_SPLUNK_PORT)
     input_name = str(input_port)
     if input_name not in service.inputs:
-        if verbose > 0: print "Creating input '%s'" % input_name
+        if verbose > 0: print("Creating input '%s'" % input_name)
         service.inputs.create(
             input_port, "tcp", index="twitter", sourcetype="twitter")
     
@@ -266,7 +267,7 @@ def main():
     ingest.connect((input_host, input_port))
 
     if verbose > 0: 
-        print "Listening (and sending data to %s:%s).." % (input_host, input_port)
+        print("Listening (and sending data to %s:%s).." % (input_host, input_port))
     try: 
         listen(kwargs['tusername'], kwargs['tpassword'])
     except KeyboardInterrupt:
@@ -275,7 +276,7 @@ def main():
         error("""There was an error with the connection to Twitter. Make sure
 you don't have other running instances of the 'twitted' sample app, and try 
 again.""", 2)
-        print e
+        print(e)
         
 if __name__ == "__main__":
     main()

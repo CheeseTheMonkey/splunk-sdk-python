@@ -14,6 +14,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from __future__ import print_function
 try:
     import unittest2 as unittest
 except ImportError:
@@ -28,10 +29,10 @@ class ModularInputKindTestCase(testlib.SDKTestCase):
     
     def test_lists_modular_inputs(self):
         if self.service.splunk_version[0] < 5:
-            print "Modular inputs don't exist prior to Splunk 5.0. Skipping."
+            print("Modular inputs don't exist prior to Splunk 5.0. Skipping.")
             return
         elif not self.app_collection_installed():
-            print "Test requires sdk-app-collection. Skipping."
+            print("Test requires sdk-app-collection. Skipping.")
             return
         else:
             # Install modular inputs to list, and restart
@@ -49,7 +50,7 @@ class ModularInputKindTestCase(testlib.SDKTestCase):
                 self.check_modular_input_kind(m)
 
     def check_modular_input_kind(self, m):
-        print m.name
+        print(m.name)
         if m.name == 'test1':
             self.assertEqual('Test "Input" - 1', m['title'])
             self.assertEqual("xml", m['streaming_mode'])

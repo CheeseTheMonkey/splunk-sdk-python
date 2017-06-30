@@ -13,6 +13,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+from __future__ import print_function
 from splunklib.binding import HTTPError
 
 import testlib
@@ -159,7 +160,7 @@ class TestRead(testlib.SDKTestCase):
 
     def test_oneshot(self):
         if not self.app_collection_installed():
-            print "Test requires sdk-app-collection. Skipping."
+            print("Test requires sdk-app-collection. Skipping.")
             return
         self.install_app_from_collection('file_to_upload')
 
@@ -219,10 +220,10 @@ class TestInput(testlib.SDKTestCase):
 
     def test_lists_modular_inputs(self):
         if self.service.splunk_version[0] < 5:
-            print "Modular inputs don't exist prior to Splunk 5.0. Skipping."
+            print("Modular inputs don't exist prior to Splunk 5.0. Skipping.")
             return
         elif not self.app_collection_installed():
-            print "Test requires sdk-app-collection. Skipping."
+            print("Test requires sdk-app-collection. Skipping.")
             return
         else:
             # Install modular inputs to list, and restart

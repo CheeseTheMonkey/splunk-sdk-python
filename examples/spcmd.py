@@ -22,6 +22,7 @@
 # 'output_mode' to a legal output_mode value.
 
 """An interactive command shell for Splunk.""" 
+from __future__ import print_function
 
 from code import compile_command, InteractiveInterpreter
 try:
@@ -63,17 +64,17 @@ class Session(InteractiveInterpreter):
 
     # Run the interactive interpreter
     def run(self):
-        print "Welcome to Splunk SDK's Python interactive shell"
-        print "%s connected to %s:%s" % (
+        print("Welcome to Splunk SDK's Python interactive shell")
+        print("%s connected to %s:%s" % (
             self.service.username, 
             self.service.host, 
-            self.service.port)
+            self.service.port))
 
         while True:
             try:
                 input = raw_input("> ")
             except EOFError:
-                print "\n\nThanks for using Splunk>.\n"
+                print("\n\nThanks for using Splunk>.\n")
                 return
 
             if input is None: 
@@ -92,7 +93,7 @@ class Session(InteractiveInterpreter):
                 self.showsyntaxerror()
                 continue
             except Exception, e:
-                print "Error: %s" % e
+                print("Error: %s" % e)
                 continue
 
             self.runcode(co)

@@ -15,6 +15,7 @@
 # under the License.
 
 """A command line utility for interacting with Splunk search jobs."""
+from __future__ import print_function
 
 # All job commands operate on search 'specifiers' (spec). A search specifier
 # is either a search-id (sid) or the index of the search job in the list of
@@ -129,7 +130,7 @@ class Program:
             error("Command requires a search expression", 2)
         query = opts.args[0]
         job = self.service.jobs.create(opts.args[0], **opts.kwargs)
-        print job.sid
+        print(job.sid)
 
     def events(self, argv):
         """Retrieve events for the specified search jobs."""
@@ -160,12 +161,12 @@ class Program:
                 # Ignore some fields that make the output hard to read and
                 # that are available via other commands.
                 if key in ["performance"]: continue
-                print "%s: %s" % (key, job.content[key])
+                print("%s: %s" % (key, job.content[key]))
 
         if len(argv) == 0:
             index = 0
             for job in self.service.jobs:
-                print "@%d : %s" % (index, job.sid)
+                print("@%d : %s" % (index, job.sid))
                 index += 1
             return
 

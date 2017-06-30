@@ -1,5 +1,6 @@
 #!/usr/bin/python
  
+from __future__ import print_function
 __doc__ = """Tiny HTTP Proxy.
  
 This module implements GET, HEAD, POST, PUT and DELETE methods
@@ -198,13 +199,13 @@ def logSetup (filename, log_size, daemon):
     return logger
  
 def usage (msg=None):
-    if msg: print msg
-    print sys.argv[0], "[-p port] [-l logfile] [-dh] [allowed_client_name ...]]"
-    print
-    print "   -p       - Port to bind to"
-    print "   -l       - Path to logfile. If not specified, STDOUT is used"
-    print "   -d       - Run in the background"
-    print
+    if msg: print(msg)
+    print(sys.argv[0], "[-p port] [-l logfile] [-dh] [allowed_client_name ...]]")
+    print()
+    print("   -p       - Port to bind to")
+    print("   -l       - Path to logfile. If not specified, STDOUT is used")
+    print("   -d       - Run in the background")
+    print()
  
 def handler (signo, frame):
     while frame and isinstance (frame, FrameType):
@@ -331,7 +332,7 @@ def main ():
     ProxyHandler.protocol = "HTTP/1.0"
     httpd = ThreadingHTTPServer (server_address, ProxyHandler, logger)
     sa = httpd.socket.getsockname ()
-    print "Servering HTTP on", sa[0], "port", sa[1]
+    print("Servering HTTP on", sa[0], "port", sa[1])
     req_count = 0
     while not run_event.isSet ():
         try:
